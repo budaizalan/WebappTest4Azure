@@ -14,10 +14,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: generate image tag
+      run: |
+        echo "IMAGE_TAG=$(date +%s)" >> $GITHUB_ENV
+        
     - uses: actions/checkout@v4
     - name: Build the Docker image
       run: |
-        echo "IMG_TAG=$(date +%s)" >> $GITHUB_ENV
         docker build . --file Dockerfile --tag ghcr.io/budaizalan/webtest4azure:$IMG_TAG
         docker login ghcr.io -u budaizalan -p ${{secrets.GHCR_TOKEN}}
         docker push ghcr.io/budaizalan/webtest4azure:$IMG_TAG
